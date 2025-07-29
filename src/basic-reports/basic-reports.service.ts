@@ -9,7 +9,7 @@ export class BasicReportsService {
     ){}
 
     async hello(){
-        return this.prisma.employees.findFirst();
+        return await this.prisma.employees.findFirst();
     }
 
 }
