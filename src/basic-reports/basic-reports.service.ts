@@ -1,15 +1,63 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { TDocumentDefinitions } from 'pdfmake/interfaces';
+import { PrinterService } from 'src/printer/printer.service';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { getEmploymentLetterByIdReport, getEmploymentLetterReport } from 'src/reports';
+import { getHelloWorldReports } from 'src/reports/hello-world.report';
+
 
 @Injectable()
 export class BasicReportsService {
+  
+  
 
-    constructor(
-        private prisma: PrismaService,
-    ){}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly printerService: PrinterService,
+  ){}
 
-    async hello(){
-        return await this.prisma.employees.findFirst();
-    }
+hello(){
+    const docDefinition: TDocumentDefinitions = getHelloWorldReports({name: 'Jeremy Fernández'})
+
+    var doc = this.printerService.createPdf(docDefinition);
+
+    return doc
+  }
+
+
+  employmentLetter() {
+    const docDefinition: TDocumentDefinitions = getEmploymentLetterReport()
+
+    var doc = this.printerService.createPdf(docDefinition);
+
+    return doc
+  }
+
+  async employmentLetterById(employeId: number) {
+
+    const employees = await this.prisma.employees.findUnique({
+      where: {
+        id: employeId,
+      }
+    });
+
+    if(!employees) throw new NotFoundException(`EmployeeID: ${employeId} not found`);
+
+    const docDefinition: TDocumentDefinitions = getEmploymentLetterByIdReport({
+      employerName: 'Jeremy Fernández',
+      employerPosition: 'Gerente de RRHH',
+      employeeName: employees.name,
+      employeePosition: employees.position,
+      employeeStartDate: employees.start_date,
+      employeeHours: employees.hours_per_day,
+      employeeWorkSchedule: employees.work_schedule,
+      employerCompany: 'Tucan Code Corp.',
+    })
+
+    var doc = this.printerService.createPdf(docDefinition);
+
+    return doc
+  }
+
 
 }

@@ -1,5 +1,6 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Param, Res } from '@nestjs/common';
 import { BasicReportsService } from './basic-reports.service';
+import {Response} from 'express';
 
 @Controller('basic-reports')
 export class BasicReportsController {
@@ -9,7 +10,36 @@ export class BasicReportsController {
 
 
   @Get()
-  async hello(){
-    return await this.basicReportsService.hello();
+  async hello(@Res() response: Response){
+    const pdfDoc =  this.basicReportsService.hello();
+    response.setHeader('Content-type', 'application/pdf');
+    pdfDoc.info.Title = 'Hola-Mundo.pdf'
+    pdfDoc.pipe(response);
+    pdfDoc.end();
   }
+
+  @Get('employment-letter')
+  async employmentLetter(@Res() response: Response ){
+    const pdfDoc = this.basicReportsService.employmentLetter();
+    
+    response.setHeader('Content-Type', 'application/pdf');
+    pdfDoc.info.Title = 'Hola-Mundo.pdf'
+    pdfDoc.pipe(response);
+    pdfDoc.end();
+
+  }
+
+
+  @Get('employment-letter/:employeId')
+  async employmentLetterId(@Res() response: Response, @Param('employeId') employeId: string ){
+    const pdfDoc = await this.basicReportsService.employmentLetterById(+employeId);
+    
+    response.setHeader('Content-Type', 'application/pdf');
+    pdfDoc.info.Title = 'Hola-Mundo.pdf'
+    pdfDoc.pipe(response);
+    pdfDoc.end();
+
+  }
+
+
 }
