@@ -42,4 +42,16 @@ export class BasicReportsController {
   }
 
 
+   @Get('countries')
+  async getCountriesReport(@Res() response: Response ){
+    const pdfDoc = await this.basicReportsService.getCountriesReport();
+    
+    response.setHeader('Content-Type', 'application/pdf');
+    pdfDoc.info.Title = 'Hola-Mundo.pdf'
+    pdfDoc.pipe(response);
+    pdfDoc.end();
+
+  }
+
+
 }

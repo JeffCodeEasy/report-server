@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { TDocumentDefinitions } from 'pdfmake/interfaces';
 import { PrinterService } from 'src/printer/printer.service';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { getEmploymentLetterByIdReport, getEmploymentLetterReport } from 'src/reports';
+import { getCountryReport, getEmploymentLetterByIdReport, getEmploymentLetterReport } from 'src/reports';
 import { getHelloWorldReports } from 'src/reports/hello-world.report';
 
 
@@ -53,6 +53,23 @@ hello(){
       employeeWorkSchedule: employees.work_schedule,
       employerCompany: 'Tucan Code Corp.',
     })
+
+    var doc = this.printerService.createPdf(docDefinition);
+
+    return doc
+  }
+
+  async getCountriesReport(){ 
+
+    const countries = await this.prisma.countries.findMany({
+      where: {
+        local_name: {
+          not: null,
+        }
+      }
+    });
+
+    const docDefinition: TDocumentDefinitions = getCountryReport({countries})
 
     var doc = this.printerService.createPdf(docDefinition);
 
