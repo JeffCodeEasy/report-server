@@ -1,3 +1,5 @@
+export { orderByIdReport } from "./order-by-id.report";
+
 export { getEmploymentLetterByIdReport } from "./employment-letter-by-id.report";
 
 export { getEmploymentLetterReport } from "./employment-letter.report";
