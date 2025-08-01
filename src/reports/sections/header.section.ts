@@ -31,7 +31,6 @@ export const headerSection = (options: HeaderOptions): Content=> {
         margin: [0, 2, 0, 0],
         style: {
             fontSize: 16,
-            bold: true,
         }
     } : null
 
@@ -61,7 +60,7 @@ export const headerSection = (options: HeaderOptions): Content=> {
               ...(headerLogo ? [headerLogo] : []),
               ...(headerTitle ? [headerTitle] : []),
               {
-                width: 141,
+                width: 110,
                 text: showDate ? DateFormatter.getDDMMMYYYY(new Date()) : '',
                 alignment: 'right',
                 margin: [20, 30],
