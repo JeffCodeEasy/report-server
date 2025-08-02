@@ -1,3 +1,5 @@
+export { getCommunityReports } from "./community.report";
+
 export { getStatisticsReports } from "./statistics.report";
 
 export { getBasicChartSvgReport } from "./basic-chart-svg-report";
@@ -11,3 +13,4 @@ export { getEmploymentLetterReport } from "./employment-letter.report";
 export { getHelloWorldReports } from "./hello-world.report";
 
 export * from "./countries-report";
+
